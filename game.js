@@ -6,7 +6,7 @@
      */
     var Game = {
         fps: 0,
-        stage: new PIXI.Stage(0x0),
+        stage: new PIXI.Stage(0x0, true),
         fpsText: new PIXI.Text("FPS: 0", {fill: '#fff', font: '10px monospace'}),
         init: function () {
             var canvas = document.getElementById('canvas');
@@ -16,13 +16,15 @@
                 antialias: false
             });
 
+            GameStateControll.resize(window.innerWidth, window.innerHeight);
             this.stage.addChild(GameStateControll.stateContainer);
-            GameStateControll.setCurrentState(new GameMain());
+            GameStateControll.setCurrentState(new MenuMain());
 
             this.stage.addChild(this.fpsText);
         },
         resize: function (newWidth, newHeight) {
             this.renderer.resize(newWidth, newHeight);
+            GameStateControll.resize(newWidth, newHeight);
         },
         update: function (delta) {
             GameStateControll.update(delta);

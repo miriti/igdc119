@@ -26,6 +26,10 @@ GameStateControll = {
         this.stateContainer.addChild(state);
         this.currentState = state;
     },
+    resize: function (newWidth, newHeight) {
+        this.stateContainer.x = newWidth / 2;
+        this.stateContainer.y = newHeight / 2;
+    },
     update: function (delta) {
         if (this.currentState != null) {
             this.currentState.update(delta);
