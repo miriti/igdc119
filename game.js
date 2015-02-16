@@ -1,63 +1,45 @@
-function Ball() {
-    this.initCircle(30 + Math.random() * 100, 'rgb(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ')');
-    this.vector = {
-        x: -100 + Math.random() * 200,
-        y: -100 + Math.random() * 200
-    }
-}
-
-Ball.prototype = Object.create(Circle.prototype);
-
-Ball.prototype.update = function (delta) {
-    this.x += this.vector.x * delta;
-    this.y += this.vector.y * delta;
-
-    if (this.x > 960 - this.radius) {
-        this.x = 960 - this.radius;
-        this.vector.x *= -1;
-    }
-
-    if (this.x < -960 + this.radius) {
-        this.x = -960 + this.radius;
-        this.vector.x *= -1;
-    }
-
-    if (this.y < -540 + this.radius) {
-        this.y = -540 + this.radius;
-        this.vector.y *= -1;
-    }
-
-    if (this.y > 540 - this.radius) {
-        this.y = 540 - this.radius;
-        this.vector.y *= -1;
-    }
-};
-
 (function () {
+    /**
+     * The Game
+     *
+     * @type {{fps: number, stage: PIXI.Stage, fpsText: PIXI.Text, init: Function, resize: Function, update: Function, updateFPSInfo: Function}}
+     */
     var Game = {
         fps: 0,
-        stage: new Stage(),
-        tf: new TextField("FPS: ??"),
+        stage: new PIXI.Stage(0x0),
+        fpsText: new PIXI.Text("FPS: 0", {fill: '#fff', font: '10px monospace'}),
         init: function () {
-            for (var i = 0; i < 500; i++) {
-                var b = new Ball();
-                b.setPosition(-960 + 1920 * Math.random(), -540 + 1080 * Math.random());
-                this.stage.addChild(b);
-            }
+            var canvas = document.getElementById('canvas');
 
-            this.tf.observe(this, 'fps');
-            this.stage.addChild(this.tf.setPosition(-960, -500));
+            this.renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {
+                view: canvas,
+                antialias: false
+            });
+
+            this.stage.addChild(GameStateControll.stateContainer);
+            GameStateControll.setCurrentState(new GameMain());
+
+            this.stage.addChild(this.fpsText);
+        },
+        resize: function (newWidth, newHeight) {
+            this.renderer.resize(newWidth, newHeight);
         },
         update: function (delta) {
-            this.stage.update(delta);
+            GameStateControll.update(delta);
+            this.renderer.render(this.stage);
         },
         updateFPSInfo: function (currentFPS) {
-            this.fps = "FPS: " + currentFPS;
+            this.fps = currentFPS;
+            this.fpsText.setText("FPS: " + this.fps);
         }
     };
 
+    // Init The Game
     Game.init();
 
+    /**
+     * Measure FPS
+     */
     var lastTime = new Date().getTime();
     var frames = 0;
 
@@ -66,22 +48,30 @@ Ball.prototype.update = function (delta) {
         frames = 0;
     }, 1000);
 
+    /**
+     * Main Loop
+     */
     function updateGame() {
         var currentTime = new Date().getTime();
 
-        setTimeout(function () {
-            requestAnimationFrame(function () {
-                var delta = ((currentTime - lastTime) == 0 ? 1 : (currentTime - lastTime)) / 1000;
+        requestAnimationFrame(function () {
+            var delta = ((currentTime - lastTime) == 0 ? 1 : (currentTime - lastTime)) / 1000;
 
-                if (delta > 1) delta = 1;
+            if (delta > 1) delta = 1;
 
-                Game.update(delta);
-                frames++;
-                lastTime = currentTime;
-                requestAnimationFrame(updateGame);
-            });
-        }, 1000 / 60);
+            Game.update(delta);
+            frames++;
+            lastTime = currentTime;
+            requestAnimationFrame(updateGame);
+        });
     }
 
     updateGame();
+
+    /**
+     * Handle window resize
+     */
+    window.onresize = function () {
+        Game.resize(window.innerWidth, window.innerHeight);
+    }
 })();
