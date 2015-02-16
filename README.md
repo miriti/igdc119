@@ -1,6 +1,6 @@
 # IGDC.RU - Конкурс №119 "SSP"
 
-Конкурс на [igdc.ru](http://igdc.ru/) который проходил с 12 по 26 февраля 2015г.
+[Конкурс](http://igdc.ru/igdc_top.php?konkurs=119) на [igdc.ru](http://igdc.ru/) который проходил с 12 по 26 февраля 2015г.
 
 ## Правила:
 ![Image](http://igdc.ru/images/articles/119_ssp.jpg)
