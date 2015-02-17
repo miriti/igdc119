@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+    <title>Pixi.js Test</title>
+    <link rel="stylesheet" href="style.css" media="screen">
+</head>
+<body>
+<div id="container">
+</div>
+<p id="fpsCounter" style="text-align: center">FPS: ???</p>
+<script charset="utf-8" src="pixi.js/bin/pixi.dev.js"></script>
+<script charset="utf-8">
+    var renderer;
+    var stage;
+    var frames = 0;
+
+    function render() {
+        renderer.render(stage);
+        requestAnimationFrame(render);
+        frames++;
+    }
+    ;
+
+    function start() {
+        var canvas = document.getElementById('canvas');
+
+        stage = new PIXI.Stage(0x000000);
+
+        renderer = PIXI.autoDetectRenderer(800, 600);
+        document.getElementById('container').appendChild(renderer.view);
+
+        render();
+
+        setInterval(function () {
+            document.getElementById('fpsCounter').innerHTML = 'FPS: ' + frames;
+            frames = 0;
+        }, 1000);
+    }
+    ;
+    document.onready = start();
+</script>
+</body>
+</html>

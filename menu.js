@@ -13,13 +13,11 @@ MenuItem = function (caption) {
     };
 
     this.mouseover = function () {
-        text.setStyle({font: "bold 60px monospace", fill: '#f00'});
-        text.x = -text.width / 2;
+        text.setStyle({font: "bold 50px monospace", fill: '#f00'});
     };
 
     this.mouseout = function () {
         text.setStyle({font: "bold 50px monospace", fill: '#fff'});
-        text.x = -text.width / 2;
     };
 };
 

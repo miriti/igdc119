@@ -7,32 +7,21 @@
     var Game = {
         fps: 0,
         stage: new PIXI.Stage(0x0, true),
-        fpsText: new PIXI.Text("FPS: 0", {fill: '#fff', font: '10px monospace'}),
         init: function () {
-            var canvas = document.getElementById('canvas');
 
-            this.renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, {
-                view: canvas,
-                antialias: false
-            });
+            this.renderer = PIXI.autoDetectRenderer(800, 600);
 
-            GameStateControll.resize(window.innerWidth, window.innerHeight);
-            this.stage.addChild(GameStateControll.stateContainer);
-            GameStateControll.setCurrentState(new MenuMain());
+            document.getElementById('container').appendChild(this.renderer.view);
 
-            this.stage.addChild(this.fpsText);
-        },
-        resize: function (newWidth, newHeight) {
-            this.renderer.resize(newWidth, newHeight);
-            GameStateControll.resize(newWidth, newHeight);
+            //this.stage.addChild(GameStateControll.stateContainer);
+            //GameStateControll.resize(1024, 576);
+            //GameStateControll.setCurrentState(new MenuMain());
         },
         update: function (delta) {
             GameStateControll.update(delta);
-            this.renderer.render(this.stage);
         },
-        updateFPSInfo: function (currentFPS) {
-            this.fps = currentFPS;
-            this.fpsText.setText("FPS: " + this.fps);
+        render: function () {
+            this.renderer.render(this.stage);
         }
     };
 
@@ -46,7 +35,7 @@
     var frames = 0;
 
     setInterval(function () {
-        Game.updateFPSInfo(frames);
+        document.getElementsByTagName('p')[0].innerHTML = 'FPS: ' + frames;
         frames = 0;
     }, 1000);
 
@@ -61,7 +50,8 @@
 
             if (delta > 1) delta = 1;
 
-            Game.update(delta);
+            //Game.update(delta);
+            Game.render();
             frames++;
             lastTime = currentTime;
             requestAnimationFrame(updateGame);
@@ -69,11 +59,4 @@
     }
 
     updateGame();
-
-    /**
-     * Handle window resize
-     */
-    window.onresize = function () {
-        Game.resize(window.innerWidth, window.innerHeight);
-    }
 })();
