@@ -1,27 +1,31 @@
 (function () {
-    /**
-     * The Game
-     *
-     * @type {{fps: number, stage: PIXI.Stage, fpsText: PIXI.Text, init: Function, resize: Function, update: Function, updateFPSInfo: Function}}
-     */
     var Game = {
         fps: 0,
         stage: new PIXI.Stage(0x0, true),
         init: function () {
 
-            this.renderer = PIXI.autoDetectRenderer(800, 600);
+            this.renderer = PIXI.autoDetectRenderer(innerWidth, innerHeight);
 
             document.getElementById('container').appendChild(this.renderer.view);
 
-            //this.stage.addChild(GameStateControll.stateContainer);
-            //GameStateControll.resize(1024, 576);
-            //GameStateControll.setCurrentState(new MenuMain());
+            GameResources.load();
+
+            this.stage.addChild(GameStateControll.stateContainer);
+            GameStateControll.resize(innerWidth, innerHeight);
+            GameStateControll.setCurrentState(new MenuMain());
         },
         update: function (delta) {
             GameStateControll.update(delta);
         },
         render: function () {
             this.renderer.render(this.stage);
+        },
+        resize: function (newWidth, newHeight) {
+            this.renderer.resize(newWidth, newHeight);
+            GameStateControll.resize(newWidth, newHeight);
+        },
+        updateFps: function (newFPS) {
+            this.fps = newFPS;
         }
     };
 
@@ -35,7 +39,7 @@
     var frames = 0;
 
     setInterval(function () {
-        document.getElementsByTagName('p')[0].innerHTML = 'FPS: ' + frames;
+        Game.updateFps(frames);
         frames = 0;
     }, 1000);
 
@@ -50,13 +54,17 @@
 
             if (delta > 1) delta = 1;
 
-            //Game.update(delta);
+            Game.update(delta);
             Game.render();
             frames++;
             lastTime = currentTime;
-            requestAnimationFrame(updateGame);
+            updateGame();
         });
     }
 
     updateGame();
+
+    window.onresize = function () {
+        Game.resize(innerWidth, innerHeight);
+    }
 })();

@@ -10,11 +10,10 @@ GameState = function () {
 GameState.prototype = Object.create(GameObject.prototype);
 GameState.prototype.constructor = GameState;
 
-/**
- * Game State Controll
- *
- * @type {{stateContainer: PIXI.DisplayObjectContainer, currentState: null, setCurrentState: Function, update: Function}}
- */
+GameState.prototype.resize = function (newWidth, newHeight) {
+
+};
+
 GameStateControll = {
     stateContainer: new PIXI.DisplayObjectContainer(),
     currentState: null,
@@ -29,6 +28,10 @@ GameStateControll = {
     resize: function (newWidth, newHeight) {
         this.stateContainer.x = newWidth / 2;
         this.stateContainer.y = newHeight / 2;
+
+        if(this.currentState != null) {
+            this.currentState.resize(newWidth, newHeight);
+        }
     },
     update: function (delta) {
         if (this.currentState != null) {
