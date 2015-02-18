@@ -34,19 +34,18 @@ MenuItem.prototype.hoverStyle = {font: "bold 40px monospace", fill: '#fff'};
 MenuMain = function () {
     GameState.call(this);
 
-    this.spaceBack = new PIXI.Sprite(R.t('space'));
-    this.spaceBack.filters = [new PIXI.BlurFilter()];
+    /** Background **/
+    this.spaceBack = new PIXI.Sprite(GameResources.textures.space);
     this.addChild(this.spaceBack);
 
-    this.planet = new PIXI.Sprite(R.t('planet'));
-    this.planet.anchor.set(this.planet.width / 2, this.planet.height / 2);
-    this.planet.scale.set(2,2);
+    /** Planet **/
+    this.planet = new PIXI.Sprite(GameResources.textures.planet);
+    this.planet.pivot.set(this.planet.width / 2, this.planet.height / 2);
+    this.planet.scale.set(1.2, 1.2);
     this.planet.position.set(400, 300);
-
-    this.planet.filters = [new PIXI.ColorStepFilter()];
-
     this.addChild(this.planet);
 
+    /** Menu items **/
     this.initItems([new MenuItem("Start", function () {
         console.log('Start');
     }), new MenuItem("Options", function () {
@@ -54,9 +53,6 @@ MenuMain = function () {
     }), new MenuItem("Credits", function () {
         console.log("Credits");
     })]);
-
-
-    this.resize(innerWidth, innerHeight);
 };
 
 MenuMain.prototype = Object.create(GameState.prototype);
@@ -85,5 +81,5 @@ MenuMain.prototype.resize = function (newWidth, newHeight) {
 };
 
 MenuMain.prototype.update = function (delta) {
-    this.planet.rotation += delta/100;
+    this.planet.rotation += delta / 200;
 };

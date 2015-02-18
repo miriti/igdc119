@@ -17,6 +17,8 @@ GameState.prototype.resize = function (newWidth, newHeight) {
 GameStateControll = {
     stateContainer: new PIXI.DisplayObjectContainer(),
     currentState: null,
+    currentWidth: 0,
+    currentHeight: 0,
     setCurrentState: function (state) {
         if (this.currentState != null) {
             this.stateContainer.removeChild(this.currentState);
@@ -24,8 +26,12 @@ GameStateControll = {
 
         this.stateContainer.addChild(state);
         this.currentState = state;
+        this.currentState.resize(this.currentWidth, this.currentHeight);
     },
     resize: function (newWidth, newHeight) {
+        this.currentWidth = newWidth;
+        this.currentHeight = newHeight;
+
         this.stateContainer.x = newWidth / 2;
         this.stateContainer.y = newHeight / 2;
 

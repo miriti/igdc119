@@ -1,24 +1,30 @@
 GameResources = {
-    basePath: 'data',
-    texturesFiles: ['planet.png', 'space.jpg'],
-    textures: {},
-
-    t: function (id) {
-        return this.textures[id];
+    files: {
+        space: 'textures/space.jpg',
+        planet: 'textures/planet.png'
     },
-
+    textures: {},
     load: function (callback) {
-        for (var i in this.texturesFiles) {
-            var fname = this.texturesFiles[i];
-            var id = (function () {
-                var parts = fname.split('.');
-                parts.pop();
-                return parts.join('.');
-            })();
-            this.textures[id] = PIXI.Texture.fromImage(this.basePath + '/textures/' + fname);
-            console.log("Texure:", this.basePath + '/textures/' + fname, 'ID', id);
+
+        var allResources = [];
+
+        for (var id in this.files) {
+            allResources.push('data/' + this.files[id]);
         }
+
+        var pixiLoader = new PIXI.AssetLoader(allResources);
+        pixiLoader.load();
+
+        (function (R) {
+            pixiLoader.onComplete = function () {
+                for (var id in R.files) {
+                    R.textures[id] = PIXI.Texture.fromImage('data/' + R.files[id]);
+                }
+
+                if (typeof callback === 'function') {
+                    callback.call();
+                }
+            };
+        })(this);
     }
 };
-
-R = GameResources;

@@ -8,11 +8,14 @@
 
             document.getElementById('container').appendChild(this.renderer.view);
 
-            GameResources.load();
-
             this.stage.addChild(GameStateControll.stateContainer);
+
+            GameStateControll.setCurrentState(new Loading());
             GameStateControll.resize(innerWidth, innerHeight);
-            GameStateControll.setCurrentState(new MenuMain());
+
+            GameResources.load(function () {
+                GameStateControll.setCurrentState(new MenuMain());
+            });
         },
         update: function (delta) {
             GameStateControll.update(delta);
