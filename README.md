@@ -3,7 +3,7 @@
 [Конкурс](http://igdc.ru/igdc_top.php?konkurs=119) на [igdc.ru](http://igdc.ru/) который проходил с 12 по 26 февраля 2015г.
 
 ## Правила:
-![Image](http://igdc.ru/images/articles/119_ssp.jpg)
+![Image](119_ssp.jpg)
 
 _"Земля — колыбель человечества, но нельзя вечно оставаться в колыбели."_
 К.Э. Циолковский.
