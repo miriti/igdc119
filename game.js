@@ -67,6 +67,14 @@
 
     updateGame();
 
+    window.onkeydown = function (e) {
+        GameInput.keydown(e);
+    };
+
+    window.onkeyup = function (e) {
+        GameInput.keyup(e);
+    };
+
     window.onresize = function () {
         Game.resize(innerWidth, innerHeight);
     }

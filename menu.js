@@ -1,6 +1,8 @@
 MenuItem = function (caption, action) {
     PIXI.DisplayObjectContainer.call(this);
 
+    this.caption = caption;
+
     var text = new PIXI.Text(caption, this.defaultStyle);
     text.x = -text.width / 2;
     this.addChild(text);
@@ -46,8 +48,8 @@ MenuMain = function () {
     this.addChild(this.planet);
 
     /** Menu items **/
-    this.initItems([new MenuItem("Start", function () {
-        console.log('Start');
+    this.initItems([new MenuItem("New Game", function () {
+        GameStateControll.setCurrentState(new GameMain());
     }), new MenuItem("Options", function () {
         console.log("Options");
     }), new MenuItem("Credits", function () {
@@ -58,7 +60,11 @@ MenuMain = function () {
 MenuMain.prototype = Object.create(GameState.prototype);
 MenuMain.prototype.constructor = MenuMain;
 
+MenuMain.prototype.items = null;
+
 MenuMain.prototype.initItems = function (items) {
+    this.items = items;
+
     (function (c) {
         var margin = 5;
         var top = 0;

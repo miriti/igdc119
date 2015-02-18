@@ -37,3 +37,7 @@ Vector2.prototype.lim = function (len) {
     this.y = (this.y / clen) * len;
     return this;
 };
+
+echo = trace = function () {
+    console.log.apply(console, Array.prototype.slice.call(arguments));
+};

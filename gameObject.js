@@ -8,7 +8,9 @@ GameObject.prototype.constructor = GameObject;
 GameObject.prototype.update = function (delta) {
     for (var i = 0; i < this.children.length; i++) {
         if (this.children[i] instanceof GameObject) {
-            this.children[i].update(delta);
+            if (this.children[i].visible) {
+                this.children[i].update(delta);
+            }
         }
     }
 }
