@@ -1,5 +1,5 @@
 Game.Loading = function () {
-    Game.GameState.call(this);
+    Game.State.call(this);
 
     var text = new PIXI.Text("Loading...", {font: "bold 30px monospace", fill: "#fff"});
 
@@ -8,5 +8,5 @@ Game.Loading = function () {
     this.addChild(text);
 };
 
-Game.Loading.prototype = Object.create(Game.GameState.prototype);
+Game.Loading.prototype = Object.create(Game.State.prototype);
 Game.Loading.prototype.constructor = Game.Loading;

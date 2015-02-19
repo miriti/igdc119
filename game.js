@@ -49,11 +49,11 @@ Game = {
             updateGame();
 
             window.onkeydown = function (e) {
-                Game.GameInput.keydown(e);
+                Game.Input.keydown(e);
             };
 
             window.onkeyup = function (e) {
-                Game.GameInput.keyup(e);
+                Game.Input.keyup(e);
             };
 
             window.onresize = function () {

@@ -1,4 +1,4 @@
-Game.GameInput = {
+Game.Input = {
     Keys: {
         BACKSPACE: 8,
         TAB: 9,
@@ -101,6 +101,18 @@ Game.GameInput = {
     },
     pressedKeys: new Array(256),
     keyReactions: new Array(256),
+    isLeft: function () {
+        return this.pressedKeys[this.Keys.LEFT_ARROW] || this.pressedKeys[this.Keys.A];
+    },
+    isRight: function () {
+        return this.pressedKeys[this.Keys.RIGHT_ARROW] || this.pressedKeys[this.Keys.D];
+    },
+    isUp: function () {
+        return this.pressedKeys[this.Keys.UP_ARROW] || this.pressedKeys[this.Keys.W];
+    },
+    isDown: function () {
+        return this.pressedKeys[this.Keys.DOWN_ARROW] || this.pressedKeys[this.Keys.S];
+    },
     /**
      * Keydown
      *

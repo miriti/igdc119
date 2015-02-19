@@ -1,18 +1,18 @@
-Game.GameState = function () {
+Game.State = function () {
     Game.GameObject.call(this);
 };
 
-Game.GameState.prototype = Object.create(Game.GameObject.prototype);
-Game.GameState.prototype.constructor = Game.GameState;
+Game.State.prototype = Object.create(Game.GameObject.prototype);
+Game.State.prototype.constructor = Game.State;
 
-Game.GameState.prototype.resize = function (newWidth, newHeight) {
+Game.State.prototype.resize = function (newWidth, newHeight) {
 
 };
 
-Game.GameState.prototype.keydown = function (e) {
+Game.State.prototype.keydown = function (e) {
 };
 
-Game.GameState.prototype.keyup = function (e) {
+Game.State.prototype.keyup = function (e) {
 };
 
 Game.GameStateControll = {

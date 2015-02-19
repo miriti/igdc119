@@ -1,5 +1,5 @@
-Game.GameMain = function () {
-    Game.GameState.call(this);
+Game.Main = function () {
+    Game.State.call(this);
 
     if (Game.GameStateControll.currentState instanceof  Game.MenuMain) {
         var newGame = this;
@@ -16,13 +16,25 @@ Game.GameMain = function () {
 
         Game.GameStateControll.currentState.initItems(Game.GameStateControll.currentState.items);
     }
+
+    this.addChild(new Game.Planet());
+
+    this.player = new Game.Player();
+    this.player.position.set(100, 100);
+    this.addChild(this.player);
 };
 
-Game.GameMain.prototype = Object.create(Game.GameState.prototype);
-Game.GameMain.prototype.constructor = Game.GameMain;
+Game.Main.prototype = Object.create(Game.State.prototype);
+Game.Main.prototype.constructor = Game.Main;
 
-Game.GameMain.prototype.keydown = function (e) {
-    if (e.keyCode == Game.GameInput.Keys.ESCAPE) {
+Game.Main.prototype.update = function (delta) {
+    Game.GameObject.prototype.update.call(this, delta);
+    this.x = -(this.player.x * this.scale.x);
+    this.y = -(this.player.y * this.scale.y);
+};
+
+Game.Main.prototype.keydown = function (e) {
+    if (e.keyCode == Game.Input.Keys.ESCAPE) {
         Game.GameStateControll.popState();
     }
 };

@@ -34,7 +34,7 @@ Game.MenuItem.prototype.defaultStyle = {font: "bold 40px monospace", fill: '#aaa
 Game.MenuItem.prototype.hoverStyle = {font: "bold 40px monospace", fill: '#fff'};
 
 Game.MenuMain = function () {
-    Game.GameState.call(this);
+    Game.State.call(this);
 
     /** Background **/
     this.spaceBack = new PIXI.Sprite(Game.GameResources.textures.space);
@@ -49,7 +49,7 @@ Game.MenuMain = function () {
 
     /** Menu items **/
     this.initItems([new Game.MenuItem("New Game", function () {
-        Game.GameStateControll.setCurrentState(new Game.GameMain());
+        Game.GameStateControll.setCurrentState(new Game.Main());
     }), new Game.MenuItem("Options", function () {
         console.log("Options");
     }), new Game.MenuItem("Credits", function () {
@@ -57,7 +57,7 @@ Game.MenuMain = function () {
     })]);
 };
 
-Game.MenuMain.prototype = Object.create(Game.GameState.prototype);
+Game.MenuMain.prototype = Object.create(Game.State.prototype);
 Game.MenuMain.prototype.constructor = Game.MenuMain;
 
 Game.MenuMain.prototype.items = null;

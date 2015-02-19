@@ -1,8 +1,8 @@
 Game.Vector2 = function (x, y) {
-    this.x = x;
-    this.y = y;
+    PIXI.Point.call(this, x, y);
 };
 
+Game.Vector2.prototype = Object.create(PIXI.Point.prototype);
 Game.Vector2.prototype.constructor = Game.Vector2;
 
 /**
@@ -37,6 +37,39 @@ Game.Vector2.prototype.lim = function (len) {
     this.y = (this.y / clen) * len;
     return this;
 };
+
+/**
+ * Generate Vector2 from PIXI.Point
+ *
+ * @param pixiPoint PIXI.Point
+ * @returns {Game.Vector2}
+ */
+Game.Vector2.prototype.fromPixiPoint = function (pixiPoint) {
+    this.x = pixiPoint.x;
+    this.y = pixiPoint.y;
+    return this;
+};
+
+/**
+ * Add
+ *
+ * @param x
+ * @param y
+ */
+Game.Vector2.prototype.add = function (x, y) {
+    this.x += x;
+    this.y += y;
+    return this;
+};
+
+Game.Vector2.prototype.lengthen = function (by) {
+    this.lim(this.len() + by);
+};
+
+Game.Vector2.prototype.set = function (x, y) {
+    PIXI.Point.prototype.set.call(this, x, y);
+    return this;
+}
 
 echo = trace = function () {
     console.log.apply(console, Array.prototype.slice.call(arguments));
