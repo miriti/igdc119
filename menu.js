@@ -1,4 +1,4 @@
-MenuItem = function (caption, action) {
+Game.MenuItem = function (caption, action) {
     PIXI.DisplayObjectContainer.call(this);
 
     this.caption = caption;
@@ -27,42 +27,42 @@ MenuItem = function (caption, action) {
     })(this);
 };
 
-MenuItem.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
-MenuItem.prototype.constructor = MenuItem;
+Game.MenuItem.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
+Game.MenuItem.prototype.constructor = Game.MenuItem;
 
-MenuItem.prototype.defaultStyle = {font: "bold 40px monospace", fill: '#aaa'};
-MenuItem.prototype.hoverStyle = {font: "bold 40px monospace", fill: '#fff'};
+Game.MenuItem.prototype.defaultStyle = {font: "bold 40px monospace", fill: '#aaa'};
+Game.MenuItem.prototype.hoverStyle = {font: "bold 40px monospace", fill: '#fff'};
 
-MenuMain = function () {
-    GameState.call(this);
+Game.MenuMain = function () {
+    Game.GameState.call(this);
 
     /** Background **/
-    this.spaceBack = new PIXI.Sprite(GameResources.textures.space);
+    this.spaceBack = new PIXI.Sprite(Game.GameResources.textures.space);
     this.addChild(this.spaceBack);
 
     /** Planet **/
-    this.planet = new PIXI.Sprite(GameResources.textures.planet);
+    this.planet = new PIXI.Sprite(Game.GameResources.textures.planet);
     this.planet.pivot.set(this.planet.width / 2, this.planet.height / 2);
     this.planet.scale.set(1.2, 1.2);
     this.planet.position.set(400, 300);
     this.addChild(this.planet);
 
     /** Menu items **/
-    this.initItems([new MenuItem("New Game", function () {
-        GameStateControll.setCurrentState(new GameMain());
-    }), new MenuItem("Options", function () {
+    this.initItems([new Game.MenuItem("New Game", function () {
+        Game.GameStateControll.setCurrentState(new Game.GameMain());
+    }), new Game.MenuItem("Options", function () {
         console.log("Options");
-    }), new MenuItem("Credits", function () {
+    }), new Game.MenuItem("Credits", function () {
         console.log("Credits");
     })]);
 };
 
-MenuMain.prototype = Object.create(GameState.prototype);
-MenuMain.prototype.constructor = MenuMain;
+Game.MenuMain.prototype = Object.create(Game.GameState.prototype);
+Game.MenuMain.prototype.constructor = Game.MenuMain;
 
-MenuMain.prototype.items = null;
+Game.MenuMain.prototype.items = null;
 
-MenuMain.prototype.initItems = function (items) {
+Game.MenuMain.prototype.initItems = function (items) {
     this.items = items;
 
     (function (c) {
@@ -77,7 +77,7 @@ MenuMain.prototype.initItems = function (items) {
     this.addChild(this.itemsContainer);
 };
 
-MenuMain.prototype.resize = function (newWidth, newHeight) {
+Game.MenuMain.prototype.resize = function (newWidth, newHeight) {
     this.spaceBack.width = this.spaceBack.height = newWidth;
     this.spaceBack.x = -newWidth / 2;
     this.spaceBack.y = -newHeight / 2;
@@ -86,6 +86,6 @@ MenuMain.prototype.resize = function (newWidth, newHeight) {
     this.itemsContainer.y = -this.itemsContainer.height / 2;
 };
 
-MenuMain.prototype.update = function (delta) {
+Game.MenuMain.prototype.update = function (delta) {
     this.planet.rotation += delta / 200;
 };

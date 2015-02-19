@@ -1,13 +1,13 @@
-GameObject = function () {
+Game.GameObject = function () {
     PIXI.DisplayObjectContainer.call(this);
 };
 
-GameObject.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
-GameObject.prototype.constructor = GameObject;
+Game.GameObject.prototype = Object.create(PIXI.DisplayObjectContainer.prototype);
+Game.GameObject.prototype.constructor = Game.GameObject;
 
-GameObject.prototype.update = function (delta) {
+Game.GameObject.prototype.update = function (delta) {
     for (var i = 0; i < this.children.length; i++) {
-        if (this.children[i] instanceof GameObject) {
+        if (this.children[i] instanceof Game.GameObject) {
             if (this.children[i].visible) {
                 this.children[i].update(delta);
             }

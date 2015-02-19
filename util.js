@@ -1,16 +1,16 @@
-Vector2 = function (x, y) {
+Game.Vector2 = function (x, y) {
     this.x = x;
     this.y = y;
 };
 
-Vector2.prototype.constructor = Vector2;
+Game.Vector2.prototype.constructor = Game.Vector2;
 
 /**
  * Vector length without taking a square root
  *
  * @returns {number}
  */
-Vector2.prototype.len2 = function () {
+Game.Vector2.prototype.len2 = function () {
     return (this.x * this.x) + (this.y * this.y);
 };
 
@@ -19,7 +19,7 @@ Vector2.prototype.len2 = function () {
  *
  * @returns {number}
  */
-Vector2.prototype.len = function () {
+Game.Vector2.prototype.len = function () {
     return Math.sqrt(this.len2());
 };
 
@@ -29,7 +29,7 @@ Vector2.prototype.len = function () {
  * @param len
  * @returns {Vector2}
  */
-Vector2.prototype.lim = function (len) {
+Game.Vector2.prototype.lim = function (len) {
     var len = len || 1;
     var clen = this.len();
 

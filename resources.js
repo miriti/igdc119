@@ -1,4 +1,4 @@
-GameResources = {
+Game.GameResources = {
     files: {
         space: 'textures/space.jpg',
         planet: 'textures/planet.png'

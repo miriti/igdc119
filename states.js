@@ -1,26 +1,21 @@
-/**
- * Game State
- *
- * @constructor
- */
-GameState = function () {
-    GameObject.call(this);
+Game.GameState = function () {
+    Game.GameObject.call(this);
 };
 
-GameState.prototype = Object.create(GameObject.prototype);
-GameState.prototype.constructor = GameState;
+Game.GameState.prototype = Object.create(Game.GameObject.prototype);
+Game.GameState.prototype.constructor = Game.GameState;
 
-GameState.prototype.resize = function (newWidth, newHeight) {
+Game.GameState.prototype.resize = function (newWidth, newHeight) {
 
 };
 
-GameState.prototype.keydown = function (e) {
+Game.GameState.prototype.keydown = function (e) {
 };
 
-GameState.prototype.keyup = function (e) {
+Game.GameState.prototype.keyup = function (e) {
 };
 
-GameStateControll = {
+Game.GameStateControll = {
     stateContainer: new PIXI.DisplayObjectContainer(),
     currentState: null,
     currentWidth: 0,
