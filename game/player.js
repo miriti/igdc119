@@ -1,7 +1,7 @@
 Game.Player = function () {
     Game.GravityObject.call(this);
 
-    this.mass = 0;
+    this.mass = 1000;
 
     (function (t, g) {
         g.beginFill(0xff0000);
@@ -13,9 +13,9 @@ Game.Player = function () {
         t.addChild(g);
     })(this, this.playerImage = new PIXI.Graphics());
 
-    this.velocity.set(-10, -200);
-    this.direction = new Game.Vector2(-10, -200);
+    this.direction = new Game.Vector2(-10, -200).lim(1);
 
+    this.drawTrail = false;
     this.trail = new PIXI.Graphics();
 };
 
@@ -29,26 +29,43 @@ Game.Player.prototype.update = function (delta) {
     this.rotation = Math.atan2(this.direction.y, this.direction.x);
 
     if(Game.Input.isUp()) {
-        this.velocity.lengthen(1);
+        if (this.velocity.len2() == 0) {
+            this.velocity.set(1, 0);
+        }
+        this.velocity.lengthen(10);
     }
 
     if(Game.Input.isDown()) {
-        this.velocity.lengthen(-1);
+        this.velocity.lengthen(-10);
+    }
+
+    if (Game.Input.isLeft()) {
+        this.velocity.turn(-Math.PI / 32);
+    }
+
+    if (Game.Input.isRight()) {
+        this.velocity.turn(Math.PI / 32);
     }
 
     Game.GravityObject.prototype.update.call(this, delta);
 
-    this.trail.beginFill(0xffffff);
-    this.trail.lineStyle(5, 0xffffff);
-    this.trail.moveTo(ox, oy);
-    this.trail.lineTo(this.x, this.y);
-    this.trail.endFill();
+    if (this.drawTrail) {
+        this.trail.beginFill(0xffffff);
+        this.trail.lineStyle(5, 0xffffff);
+        this.trail.moveTo(ox, oy);
+        this.trail.lineTo(this.x, this.y);
+        this.trail.endFill();
+    }
 
-    this.direction.set(ox - this.x, oy - this.y);
+    if ((ox != this.y) || (oy != this.y)) {
+        this.direction.set(ox - this.x, oy - this.y);
+    }
 };
 
 Game.Player.prototype.touch = function (touchWith) {
     Game.GravityObject.prototype.touch.call(this, touchWith);
 
-    this.velocity.set(0, 0);
+    var l = this.velocity.len();
+
+    this.velocity.set(this.x - touchWith.x, this.y - touchWith.y).lim(l);
 };

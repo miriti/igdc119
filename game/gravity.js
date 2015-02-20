@@ -9,6 +9,7 @@ Game.GravityObject = function () {
     this.radius = 0;
     this.mass = 0;
     this.velocity = new Game.Vector2(0, 0);
+    this.static = false;
 
     Game.Gravity.objects.push(this);
 };
@@ -24,17 +25,20 @@ Game.GravityObject.prototype.update = function (delta) {
 
     for (var i = Game.Gravity.objects.length - 1; i >= 0; i--) {
         var op = Game.Gravity.objects[i];
-        if (op != this) {
+        if ((op != this) && (!op.static)) {
             lenV.set(this.x - op.x, this.y - op.y);
             var r = lenV.len();
+
+            //console.log(r);
 
             if (r <= this.radius + op.radius) {
                 this.touch(op);
                 op.touch(this);
             } else {
-                var acc = Game.Gravity.constant * ( (op.mass) / Math.pow(r, 2));
-                var f = new Game.Vector2().set(lenV.x, lenV.y).lim(acc);
-                op.velocity.add(f.x, f.y);
+                //var acc = Game.Gravity.constant * (this.mass / Math.pow(r, 2));
+                //console.log(op, acc, this.mass, '/', Math.pow(r, 2));
+                //var f = new Game.Vector2().set(lenV.x, lenV.y).lim(acc);
+                //op.velocity.add(f.x, f.y);
             }
         }
     }

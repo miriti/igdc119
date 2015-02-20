@@ -15,7 +15,7 @@ Game.State.prototype.keydown = function (e) {
 Game.State.prototype.keyup = function (e) {
 };
 
-Game.GameStateControll = {
+Game.StateControll = {
     stateContainer: new PIXI.DisplayObjectContainer(),
     currentState: null,
     currentWidth: 0,

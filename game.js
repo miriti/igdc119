@@ -1,19 +1,20 @@
 Game = {
         fps: 0,
-        stage: new PIXI.Stage(0x0, true),
+    stage: new PIXI.Stage(0x0),
+    paused: false,
         start: function () {
 
             this.renderer = PIXI.autoDetectRenderer(innerWidth, innerHeight);
 
             document.getElementById('container').appendChild(this.renderer.view);
 
-            this.stage.addChild(Game.GameStateControll.stateContainer);
+            this.stage.addChild(Game.StateControll.stateContainer);
 
-            Game.GameStateControll.setCurrentState(new Game.Loading());
-            Game.GameStateControll.resize(innerWidth, innerHeight);
+            Game.StateControll.setCurrentState(new Game.Loading());
+            Game.StateControll.resize(innerWidth, innerHeight);
 
             Game.GameResources.load(function () {
-                Game.GameStateControll.setCurrentState(new Game.MenuMain());
+                Game.StateControll.setCurrentState(new Game.MenuMain());
             });
 
             /**
@@ -38,7 +39,10 @@ Game = {
 
                     if (delta > 1) delta = 1;
 
-                    Game.update(delta);
+                    if (!this.paused) {
+                        Game.update(delta);
+                    }
+
                     Game.render();
                     frames++;
                     lastTime = currentTime;
@@ -59,16 +63,20 @@ Game = {
             window.onresize = function () {
                 Game.resize(innerWidth, innerHeight);
             };
+
+            window.onblur = function () {
+                // TODO Pause
+            };
         },
         update: function (delta) {
-            Game.GameStateControll.update(delta);
+            Game.StateControll.update(delta);
         },
         render: function () {
             this.renderer.render(this.stage);
         },
         resize: function (newWidth, newHeight) {
             this.renderer.resize(newWidth, newHeight);
-            Game.GameStateControll.resize(newWidth, newHeight);
+            Game.StateControll.resize(newWidth, newHeight);
         },
         updateFps: function (newFPS) {
             this.fps = newFPS;

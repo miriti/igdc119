@@ -24,6 +24,17 @@ Game.Vector2.prototype.len = function () {
 };
 
 /**
+ * Mirror the vector
+ *
+ * @returns {Game.Vector2}
+ */
+Game.Vector2.prototype.mirror = function () {
+    this.x = -this.x;
+    this.y = -this.y;
+    return this;
+}
+
+/**
  * Limit vector length
  *
  * @param len
@@ -31,10 +42,12 @@ Game.Vector2.prototype.len = function () {
  */
 Game.Vector2.prototype.lim = function (len) {
     var len = len || 1;
-    var clen = this.len();
+    var clen = this.len() || 1;
 
-    this.x = (this.x / clen) * len;
-    this.y = (this.y / clen) * len;
+    if (clen != 0) {
+        this.x = (this.x / clen) * len;
+        this.y = (this.y / clen) * len;
+    }
     return this;
 };
 
@@ -69,7 +82,24 @@ Game.Vector2.prototype.lengthen = function (by) {
 Game.Vector2.prototype.set = function (x, y) {
     PIXI.Point.prototype.set.call(this, x, y);
     return this;
-}
+};
+
+/**
+ * Turning a vectory. Bydlocode style
+ *
+ * @param rad
+ * @returns {Game.Vector2}
+ */
+Game.Vector2.prototype.turn = function (rad) {
+    if (this.len2() != 0) {
+        var cur = Math.atan2(this.y, this.x);
+        var l = this.len();
+        cur += rad;
+        this.x = Math.cos(cur) * l;
+        this.y = Math.sin(cur) * l;
+    }
+    return this;
+};
 
 echo = trace = function () {
     console.log.apply(console, Array.prototype.slice.call(arguments));

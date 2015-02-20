@@ -49,7 +49,7 @@ Game.MenuMain = function () {
 
     /** Menu items **/
     this.initItems([new Game.MenuItem("New Game", function () {
-        Game.GameStateControll.setCurrentState(new Game.Main());
+        Game.StateControll.setCurrentState(new Game.Main());
     }), new Game.MenuItem("Options", function () {
         console.log("Options");
     }), new Game.MenuItem("Credits", function () {

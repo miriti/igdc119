@@ -133,8 +133,8 @@ Game.Input = {
             }
         }
 
-        if (Game.GameStateControll.currentState != null) {
-            Game.GameStateControll.currentState.keydown(e);
+        if (Game.StateControll.currentState != null) {
+            Game.StateControll.currentState.keydown(e);
         }
     },
     /**
@@ -144,8 +144,8 @@ Game.Input = {
      */
     keyup: function (e) {
         this.pressedKeys[e.keyCode] = null;
-        if (Game.GameStateControll.currentState != null) {
-            Game.GameStateControll.currentState.keyup(e);
+        if (Game.StateControll.currentState != null) {
+            Game.StateControll.currentState.keyup(e);
         }
     },
     addKeyReaction: function (keyCode, callback, singletime) {
