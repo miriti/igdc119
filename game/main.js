@@ -20,8 +20,10 @@ Game.Main = function () {
     this.addChild(new Game.Planet());
 
     this.player = new Game.Player();
-    this.player.position.set(100, 100);
+    this.player.position.set(500, 100);
     this.addChild(this.player);
+    this.addChild(this.player.trail);
+    this.scale.set(0.5, 0.5);
 };
 
 Game.Main.prototype = Object.create(Game.State.prototype);
@@ -29,8 +31,6 @@ Game.Main.prototype.constructor = Game.Main;
 
 Game.Main.prototype.update = function (delta) {
     Game.GameObject.prototype.update.call(this, delta);
-    this.x = -(this.player.x * this.scale.x);
-    this.y = -(this.player.y * this.scale.y);
 };
 
 Game.Main.prototype.keydown = function (e) {

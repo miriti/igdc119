@@ -1,7 +1,7 @@
 Game.Player = function () {
     Game.GravityObject.call(this);
 
-    this.mass = 0.01;
+    this.mass = 0;
 
     (function (t, g) {
         g.beginFill(0xff0000);
@@ -15,6 +15,8 @@ Game.Player = function () {
 
     this.velocity.set(-10, -200);
     this.direction = new Game.Vector2(-10, -200);
+
+    this.trail = new PIXI.Graphics();
 };
 
 Game.Player.prototype = Object.create(Game.GravityObject.prototype);
@@ -36,5 +38,17 @@ Game.Player.prototype.update = function (delta) {
 
     Game.GravityObject.prototype.update.call(this, delta);
 
+    this.trail.beginFill(0xffffff);
+    this.trail.lineStyle(5, 0xffffff);
+    this.trail.moveTo(ox, oy);
+    this.trail.lineTo(this.x, this.y);
+    this.trail.endFill();
+
     this.direction.set(ox - this.x, oy - this.y);
+};
+
+Game.Player.prototype.touch = function (touchWith) {
+    Game.GravityObject.prototype.touch.call(this, touchWith);
+
+    this.velocity.set(0, 0);
 };
