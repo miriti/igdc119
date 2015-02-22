@@ -37,11 +37,11 @@ Game.MenuMain = function () {
     Game.State.call(this);
 
     /** Background **/
-    this.spaceBack = new PIXI.Sprite(Game.GameResources.textures.space);
+    this.spaceBack = new PIXI.Sprite(Game.Resources.textures.space);
     this.addChild(this.spaceBack);
 
     /** Planet **/
-    this.planet = new PIXI.Sprite(Game.GameResources.textures.planet);
+    this.planet = new PIXI.Sprite(Game.Resources.textures.planet);
     this.planet.pivot.set(this.planet.width / 2, this.planet.height / 2);
     this.planet.scale.set(1.2, 1.2);
     this.planet.position.set(400, 300);

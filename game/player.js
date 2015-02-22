@@ -4,8 +4,9 @@ Game.Player = function () {
     this.mass = 1000;
 
     (function (t, g) {
-        g.beginFill(0xff0000);
-        g.drawPolygon(-10, 10, 10, 10, 0, -20);
+        g.beginFill(0xcccc00);
+        g.drawRect(-40, -20, 80, 40);
+        g.drawRect(-5, -40, 10, 80);
         g.endFill();
 
         g.rotation = -Math.PI / 2;
@@ -13,53 +14,53 @@ Game.Player = function () {
         t.addChild(g);
     })(this, this.playerImage = new PIXI.Graphics());
 
-    this.direction = new Game.Vector2(-10, -200).lim(1);
+    this.angularVelocity = 0;
 
-    this.drawTrail = false;
-    this.trail = new PIXI.Graphics();
+    this.engineLeft = new Game.Engine(this, -40, 0);
+    this.engineLeft.rotation = Math.PI + Math.PI / 2;
+
+    this.engineRight = new Game.Engine(this, 40, 0);
+    this.engineRight.rotation = Math.PI + Math.PI / 2;
 };
 
 Game.Player.prototype = Object.create(Game.GravityObject.prototype);
 Game.Player.prototype.constructor = Game.Player;
 
 Game.Player.prototype.update = function (delta) {
-    var ox = this.x;
-    var oy = this.y;
-
-    this.rotation = Math.atan2(this.direction.y, this.direction.x);
 
     if(Game.Input.isUp()) {
-        if (this.velocity.len2() == 0) {
-            this.velocity.set(1, 0);
-        }
-        this.velocity.lengthen(10);
+        this.engineLeft.power += delta;
     }
 
     if(Game.Input.isDown()) {
-        this.velocity.lengthen(-10);
+        this.engineLeft.power -= delta;
     }
 
-    if (Game.Input.isLeft()) {
-        this.velocity.turn(-Math.PI / 32);
+    var l = Game.Input.isLeft() / 3000;
+
+    if (l) {
+        if (l > 1) l = 1;
+
+        this.engineLeft.power = this.engineLeft.maxPower * l;
+    } else {
+        this.engineLeft.power = 0
     }
 
-    if (Game.Input.isRight()) {
-        this.velocity.turn(Math.PI / 32);
+    var r = Game.Input.isRight() / 3000;
+    if (r) {
+        if (r > 1) r = 1;
+
+        this.engineRight.power = this.engineRight.maxPower * r;
+    } else {
+        this.engineRight.power = 0;
     }
+
+    this.engineLeft.update(delta);
+    this.engineRight.update(delta);
+
+    this.rotation += this.angularVelocity * delta;
 
     Game.GravityObject.prototype.update.call(this, delta);
-
-    if (this.drawTrail) {
-        this.trail.beginFill(0xffffff);
-        this.trail.lineStyle(5, 0xffffff);
-        this.trail.moveTo(ox, oy);
-        this.trail.lineTo(this.x, this.y);
-        this.trail.endFill();
-    }
-
-    if ((ox != this.y) || (oy != this.y)) {
-        this.direction.set(ox - this.x, oy - this.y);
-    }
 };
 
 Game.Player.prototype.touch = function (touchWith) {
@@ -67,5 +68,5 @@ Game.Player.prototype.touch = function (touchWith) {
 
     var l = this.velocity.len();
 
-    this.velocity.set(this.x - touchWith.x, this.y - touchWith.y).lim(l);
+    this.velocity.set(this.x - touchWith.x, this.y - touchWith.y).lim(l * 0.8);
 };

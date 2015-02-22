@@ -102,16 +102,40 @@ Game.Input = {
     pressedKeys: new Array(256),
     keyReactions: new Array(256),
     isLeft: function () {
-        return this.pressedKeys[this.Keys.LEFT_ARROW] || this.pressedKeys[this.Keys.A];
+        if (this.pressedKeys[this.Keys.LEFT_ARROW] != null)
+            return new Date().getTime() - this.pressedKeys[this.Keys.LEFT_ARROW];
+
+        if (this.pressedKeys[this.Keys.A] != null)
+            return new Date().getTime() - this.pressedKeys[this.Keys.A];
+
+        return false;
     },
     isRight: function () {
-        return this.pressedKeys[this.Keys.RIGHT_ARROW] || this.pressedKeys[this.Keys.D];
+        if (this.pressedKeys[this.Keys.RIGHT_ARROW] != null)
+            return new Date().getTime() - this.pressedKeys[this.Keys.RIGHT_ARROW];
+
+        if (this.pressedKeys[this.Keys.D] != null)
+            return new Date().getTime() - this.pressedKeys[this.Keys.D];
+
+        return false;
     },
     isUp: function () {
-        return this.pressedKeys[this.Keys.UP_ARROW] || this.pressedKeys[this.Keys.W];
+        if (this.pressedKeys[this.Keys.UP_ARROW] != null)
+            return new Date().getTime() - this.pressedKeys[this.Keys.UP_ARROW];
+
+        if (this.pressedKeys[this.Keys.W] != null)
+            return new Date().getTime() - this.pressedKeys[this.Keys.W];
+
+        return false;
     },
     isDown: function () {
-        return this.pressedKeys[this.Keys.DOWN_ARROW] || this.pressedKeys[this.Keys.S];
+        if (this.pressedKeys[this.Keys.DOWN_ARROW] != null)
+            return new Date().getTime() - this.pressedKeys[this.Keys.DOWN_ARROW];
+
+        if (this.pressedKeys[this.Keys.S] != null)
+            return new Date().getTime() - this.pressedKeys[this.Keys.S];
+
+        return false;
     },
     /**
      * Keydown
@@ -119,7 +143,9 @@ Game.Input = {
      * @param e
      */
     keydown: function (e) {
-        this.pressedKeys[e.keyCode] = new Date().getTime();
+        if (this.pressedKeys[e.keyCode] == null) {
+            this.pressedKeys[e.keyCode] = new Date().getTime();
+        }
 
         if (typeof this.keyReactions[e.keyCode] !== 'undefined') {
             for (var i = this.keyReactions[e.keyCode].length; i >= 0; i--) {

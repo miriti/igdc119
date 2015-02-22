@@ -1,7 +1,8 @@
-Game.GameResources = {
+Game.Resources = {
     files: {
         space: 'textures/space.jpg',
-        planet: 'textures/planet.png'
+        planet: 'textures/planet.png',
+        spark: 'textures/spark.png'
     },
     textures: {},
     load: function (callback) {

@@ -24,7 +24,7 @@ Game.Vector2.prototype.len = function () {
 };
 
 /**
- * Mirror the vector
+ * Mirror the velocity
  *
  * @returns {Game.Vector2}
  */
@@ -35,7 +35,7 @@ Game.Vector2.prototype.mirror = function () {
 }
 
 /**
- * Limit vector length
+ * Limit velocity length
  *
  * @param len
  * @returns {Vector2}
@@ -70,8 +70,13 @@ Game.Vector2.prototype.fromPixiPoint = function (pixiPoint) {
  * @param y
  */
 Game.Vector2.prototype.add = function (x, y) {
-    this.x += x;
-    this.y += y;
+    if ((x instanceof Game.Vector2) && (typeof y === 'undefined')) {
+        this.x += x.x;
+        this.y += x.y;
+    } else {
+        this.x += x;
+        this.y += y;
+    }
     return this;
 };
 
@@ -101,6 +106,13 @@ Game.Vector2.prototype.turn = function (rad) {
     return this;
 };
 
-echo = trace = function () {
-    console.log.apply(console, Array.prototype.slice.call(arguments));
+Game.Vector2.prototype.dist2 = function (x1, y1, x2, y2) {
+    var k1 = x2 - x1;
+    var k2 = y2 - y1;
+
+    return (k1 * k1) + (k2 * k2);
+};
+
+Game.Vector2.prototype.dist = function (x1, y1, x2, y2) {
+    return Math.sqrt(this.dist2(x1, y1, x2, y2));
 };

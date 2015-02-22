@@ -1,3 +1,10 @@
+Game.mainInstance = null;
+
+/**
+ * Main game unit
+ *
+ * @constructor
+ */
 Game.Main = function () {
     Game.State.call(this);
 
@@ -20,13 +27,18 @@ Game.Main = function () {
     this.addChild(new Game.Planet());
 
     this.player = new Game.Player();
-    this.player.position.set(700, 100);
+    this.player.position.set(800, -500);
     this.addChild(this.player);
-    this.addChild(this.player.trail);
 
     this.setZoom(1);
 
     this.focusedPlanet = null;
+
+    this.particlesContainer = new Game.ParticleEngine();
+
+    this.addChild(this.particlesContainer);
+
+    Game.mainInstance = this;
 };
 
 Game.Main.prototype = Object.create(Game.State.prototype);
@@ -57,23 +69,6 @@ Game.Main.prototype.getZoom = function () {
 };
 
 /**
- * Focus camera on a player
- *
- * @param planet
- */
-Game.Main.prototype.focusOnAPlanet = function (planet) {
-    if (planet != this.focusedPlanet) {
-        this.focusedPlanet = planet;
-
-        if (planet !== null) {
-            // TODO Focus on a planet animation
-        } else {
-            // Cancel focusing
-        }
-    }
-};
-
-/**
  * Follow the object
  *
  * @param target
@@ -90,17 +85,6 @@ Game.Main.prototype.cameraFollows = function (target) {
  */
 Game.Main.prototype.update = function (delta) {
     Game.GameObject.prototype.update.call(this, delta);
-
-    for (var i in Game.Gravity.objects) {
-        var o = Game.Gravity.objects[i];
-        if ((o.static) && (o instanceof Game.Planet)) {
-            var v = new Game.Vector2(o.x - this.player.x, o.y - this.player.y);
-            if (v.len() - o.radius < 200) {
-                this.setZoom(3, 5);
-                this.focusOnAPlanet(o);
-            }
-        }
-    }
 
     if (this.focusedPlanet == null) {
         this.cameraFollows(this.player);

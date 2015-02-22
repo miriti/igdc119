@@ -13,7 +13,7 @@ Game = {
             Game.StateControll.setCurrentState(new Game.Loading());
             Game.StateControll.resize(innerWidth, innerHeight);
 
-            Game.GameResources.load(function () {
+            Game.Resources.load(function () {
                 Game.StateControll.setCurrentState(new Game.MenuMain());
             });
 

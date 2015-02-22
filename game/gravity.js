@@ -29,16 +29,11 @@ Game.GravityObject.prototype.update = function (delta) {
             lenV.set(this.x - op.x, this.y - op.y);
             var r = lenV.len();
 
-            //console.log(r);
-
             if (r <= this.radius + op.radius) {
                 this.touch(op);
                 op.touch(this);
             } else {
-                //var acc = Game.Gravity.constant * (this.mass / Math.pow(r, 2));
-                //console.log(op, acc, this.mass, '/', Math.pow(r, 2));
-                //var f = new Game.Vector2().set(lenV.x, lenV.y).lim(acc);
-                //op.velocity.add(f.x, f.y);
+                // TODO proper gravity attraction
             }
         }
     }
@@ -47,6 +42,7 @@ Game.GravityObject.prototype.update = function (delta) {
 };
 
 Game.GravityObject.prototype.destroy = function () {
+    Game.GameObject.prototype.destroy.call(this);
     var index;
 
     if ((index = Game.Gravity.objects.indexOf(this)) != -1) {
