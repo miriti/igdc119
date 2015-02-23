@@ -24,11 +24,15 @@ Game.Main = function () {
         Game.StateControll.currentState.initItems(Game.StateControll.currentState.items);
     }
 
-    this.addChild(new Game.Planet());
+    this.world = new p2.World({
+        gravity: [0, 0]
+    });
 
-    this.player = new Game.Player();
-    this.player.position.set(800, -500);
-    this.addChild(this.player);
+    this.addPhysicsObject(new Game.Planet());
+
+    this.player = new Game.Player(10, -800);
+
+    this.addPhysicsObject(this.player);
 
     this.setZoom(1);
 
@@ -43,6 +47,16 @@ Game.Main = function () {
 
 Game.Main.prototype = Object.create(Game.State.prototype);
 Game.Main.prototype.constructor = Game.Main;
+
+/**
+ * Add a physics object to the world
+ *
+ * @param phObj
+ */
+Game.Main.prototype.addPhysicsObject = function (phObj) {
+    this.addChild(phObj);
+    phObj.inject(this.world);
+};
 
 /**
  * Set zoom
@@ -84,6 +98,8 @@ Game.Main.prototype.cameraFollows = function (target) {
  * @param delta
  */
 Game.Main.prototype.update = function (delta) {
+    this.world.step(1 / 60, delta);
+
     Game.GameObject.prototype.update.call(this, delta);
 
     if (this.focusedPlanet == null) {

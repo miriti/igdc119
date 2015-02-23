@@ -4,3 +4,6 @@
 [submodule "greensock"]
 	path = greensock
 	url = https://github.com/greensock/GreenSock-JS.git
+[submodule "p2"]
+	path = p2
+	url = https://github.com/schteppe/p2.js.git

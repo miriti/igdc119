@@ -1,11 +1,11 @@
 Game.Planet = function () {
-    Game.GameObject.call(this);
+    Game.PhysicsObject.call(this);
     this.mass = 10;
     this.static = true;
     this.initPlanet(500, 400);
 };
 
-Game.Planet.prototype = Object.create(Game.GameObject.prototype);
+Game.Planet.prototype = Object.create(Game.PhysicsObject.prototype);
 Game.Planet.prototype.constructor = Game.Planet;
 
 Game.Planet.prototype.initPlanet = function (radius, atmosphere) {
@@ -24,25 +24,18 @@ Game.Planet.prototype.initPlanet = function (radius, atmosphere) {
         t.addChild(g);
     })(this, this.planetImage = new PIXI.Graphics());
 
+    this.body = new p2.Body({
+        mass: 0,
+        position: [0, 0]
+    });
+
+    this.body.addShape(new p2.Circle(this.radius));
 };
 
-Game.Planet.prototype.attract = function (obj) {
-    var vector = new Game.Vector2(this.x - obj.x, this.y - obj.y).lim(this.mass);
-    obj.velocity.add(vector.x, vector.y);
+Game.Planet.prototype.inject = function (world) {
+    world.addBody(this.body);
 };
 
 Game.Planet.prototype.update = function (delta) {
     Game.GameObject.prototype.update.call(this, delta);
-
-    for (var i = 0; i < Game.gameObjects.length; i++) {
-        var obj = Game.gameObjects[i];
-
-        if ((obj !== this) && (obj instanceof Game.GravityObject) && Game.Vector2.prototype.dist2(this.x, this.y, obj.x, obj.y) <= Math.pow(this.radius + this.atmosphere, 2)) {
-            if (Game.Vector2.prototype.dist2(this.x, this.y, obj.x, obj.y) <= Math.pow(this.radius, 2)) {
-                obj.touch(this);
-            } else {
-                this.attract(obj);
-            }
-        }
-    }
 };

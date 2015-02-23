@@ -1,3 +1,10 @@
+/**
+ * Two-component Vector
+ *
+ * @param x
+ * @param y
+ * @constructor
+ */
 Game.Vector2 = function (x, y) {
     PIXI.Point.call(this, x, y);
 };
@@ -6,7 +13,7 @@ Game.Vector2.prototype = Object.create(PIXI.Point.prototype);
 Game.Vector2.prototype.constructor = Game.Vector2;
 
 /**
- * Vector length without taking a square root
+ * The length of the vector without taking a square root
  *
  * @returns {number}
  */
@@ -15,7 +22,7 @@ Game.Vector2.prototype.len2 = function () {
 };
 
 /**
- * Vector length
+ * The length of the vector
  *
  * @returns {number}
  */
@@ -24,7 +31,7 @@ Game.Vector2.prototype.len = function () {
 };
 
 /**
- * Mirror the velocity
+ * Mirror the vector
  *
  * @returns {Game.Vector2}
  */
@@ -35,7 +42,7 @@ Game.Vector2.prototype.mirror = function () {
 }
 
 /**
- * Limit velocity length
+ * Limit the length of the vector
  *
  * @param len
  * @returns {Vector2}
@@ -52,22 +59,23 @@ Game.Vector2.prototype.lim = function (len) {
 };
 
 /**
- * Generate Vector2 from PIXI.Point
+ * Multiply the vector by scalar value
  *
- * @param pixiPoint PIXI.Point
+ * @param scalar
  * @returns {Game.Vector2}
  */
-Game.Vector2.prototype.fromPixiPoint = function (pixiPoint) {
-    this.x = pixiPoint.x;
-    this.y = pixiPoint.y;
+Game.Vector2.prototype.mult_scalar = function (scalar) {
+    this.x *= scalar;
+    this.y *= scalar;
+
     return this;
 };
 
 /**
  * Add
  *
- * @param x
- * @param y
+ * @param x {number|Vector2}
+ * @param y {number|undefined}
  */
 Game.Vector2.prototype.add = function (x, y) {
     if ((x instanceof Game.Vector2) && (typeof y === 'undefined')) {
@@ -80,10 +88,22 @@ Game.Vector2.prototype.add = function (x, y) {
     return this;
 };
 
+/**
+ * Lengthen the vector by scalar value
+ *
+ * @param by
+ */
 Game.Vector2.prototype.lengthen = function (by) {
     this.lim(this.len() + by);
 };
 
+/**
+ * Set the components of the vector
+ *
+ * @param x
+ * @param y
+ * @returns {Game.Vector2}
+ */
 Game.Vector2.prototype.set = function (x, y) {
     PIXI.Point.prototype.set.call(this, x, y);
     return this;
@@ -106,6 +126,15 @@ Game.Vector2.prototype.turn = function (rad) {
     return this;
 };
 
+/**
+ * Calculate distance between two points (without taking a square root)
+ *
+ * @param x1
+ * @param y1
+ * @param x2
+ * @param y2
+ * @returns {number}
+ */
 Game.Vector2.prototype.dist2 = function (x1, y1, x2, y2) {
     var k1 = x2 - x1;
     var k2 = y2 - y1;
@@ -113,6 +142,43 @@ Game.Vector2.prototype.dist2 = function (x1, y1, x2, y2) {
     return (k1 * k1) + (k2 * k2);
 };
 
+/**
+ * Calculate distance between two points
+ *
+ * @param x1
+ * @param y1
+ * @param x2
+ * @param y2
+ * @returns {number}
+ */
 Game.Vector2.prototype.dist = function (x1, y1, x2, y2) {
     return Math.sqrt(this.dist2(x1, y1, x2, y2));
+};
+
+/**
+ * Angle between two vectors
+ *
+ * @param v1
+ * @param v2
+ */
+Game.Vector2.prototype.angle = function (v1, v2) {
+    return Math.atan2(v2.y - v1.y, v2.x - v1.x);
+};
+
+/**
+ * Dot product
+ *
+ * @param v1 {Game.Vector2}
+ * @param v2 {Game.Vector2}
+ */
+Game.Vector2.prototype.dot = function (v1, v2) {
+    return v1.x * v2.x + v1.y * v2.y;
+};
+
+Game.Vector2.prototype.toString = function () {
+    return "x: " + this.x + " y: " + this.y;
+};
+
+Game.Vector2.prototype.clone = function () {
+    return new Game.Vector2(this.x, this.y);
 };

@@ -1,24 +1,3 @@
-Game.EngineView = function (engine) {
-    Game.GameObject.call(this);
-
-    var g = new PIXI.Graphics();
-
-    g.beginFill(0xff0000);
-    g.drawPolygon([0, 0, -20, 10, -20, -10]);
-    g.endFill();
-
-    this.addChild(g);
-
-    this.engine = engine;
-};
-
-Game.EngineView.prototype = Object.create(Game.GameObject.prototype);
-Game.EngineView.prototype.constructor = Game.EngineView;
-
-Game.EngineView.prototype.update = function (delta) {
-    Game.GameObject.prototype.update.call(this, delta);
-};
-
 /**
  * Create an engine for a flayer
  *
@@ -28,25 +7,47 @@ Game.EngineView.prototype.update = function (delta) {
  * @constructor
  */
 Game.Engine = function (flayer, atX, atY) {
-    atX = atX || 0;
-    atY = atY || 0;
+    Game.PhysicsObject.call(this);
 
-    this.view = new Game.EngineView(this);
-    this.view.x = atX;
-    this.view.y = atY;
-
-    flayer.addChild(this.view);
+    this.atX = atX || 0;
+    this.atY = atY || 0;
 
     this.flayer = flayer;
     this.rotation = 0;
-    this.maxPower = 10;
+    this.maxPower = 1000;
     this.power = 0;
     this._powerVector = new Game.Vector2(1, 0);
+
+    this.body = new p2.Body({
+        mass: 10,
+        fixedRotation: true
+    });
+
+    this.setPosition(flayer.x + atX, flayer.y + atY);
+
+    this.connection = new p2.RevoluteConstraint(this.flayer.body, this.body, {
+        localPivotA: [atX, atY],
+        localPivotB: [0, 0]
+    });
+
+    var g = new PIXI.Graphics();
+    g.beginFill(0xff0000);
+    g.drawRect(-5, -10, 10, 20);
+    g.endFill();
+
+    this.addChild(g);
 };
 
+Game.Engine.prototype = Object.create(Game.PhysicsObject.prototype);
 Game.Engine.prototype.constructor = Game.Engine;
 
+Game.Engine.prototype.inject = function (world) {
+    world.addBody(this.body);
+    world.addConstraint(this.connection);
+};
+
 Game.Engine.prototype.update = function (delta) {
+    Game.PhysicsObject.prototype.update.call(this, delta);
 
     if (this.power > this.maxPower) {
         this.power = this.maxPower;
@@ -56,19 +57,13 @@ Game.Engine.prototype.update = function (delta) {
         this.power = 0;
     }
 
-    this.view.rotation = this.rotation;
-
-    this._powerVector.set(Math.cos(this.flayer.rotation + this.rotation) * this.power, Math.sin(this.flayer.rotation + this.rotation) * this.power);
-    this.flayer.velocity.add(this._powerVector);
+    this.rotation = this.flayer.rotation;
 
     if (this.power > 0) {
-        var spark = new Game.Particle(Game.Resources.textures['spark']);
+        // Calculating Force
+        this._powerVector.set(Math.sin(this.rotation) * this.power, Math.cos(this.rotation) * this.power);
 
-        spark.velocity.set(-this._powerVector.x + Math.random() * 0.1, -this._powerVector.y + Math.random() * 0.1).lim(this.power * 100).add(this.flayer.velocity);
-
-        spark.x = this.flayer.x + this.view.x - (this._powerVector.x / this._powerVector.len()) * 20;
-        spark.y = this.flayer.y + this.view.y - (this._powerVector.y / this._powerVector.len()) * 20;
-
-        Game.mainInstance.particlesContainer.addChild(spark);
+        this.body.velocity[0] = -this._powerVector.x;
+        this.body.velocity[1] = -this._powerVector.y;
     }
 };

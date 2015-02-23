@@ -1,12 +1,11 @@
-Game.Player = function () {
-    Game.GravityObject.call(this);
+Game.Player = function (posX, posY) {
+    Game.PhysicsObject.call(this);
 
     this.mass = 1000;
 
     (function (t, g) {
         g.beginFill(0xcccc00);
-        g.drawRect(-40, -20, 80, 40);
-        g.drawRect(-5, -40, 10, 80);
+        g.drawRect(-40, -40, 80, 80);
         g.endFill();
 
         g.rotation = -Math.PI / 2;
@@ -14,16 +13,20 @@ Game.Player = function () {
         t.addChild(g);
     })(this, this.playerImage = new PIXI.Graphics());
 
-    this.angularVelocity = 0;
+    this.body = new p2.Body({
+        mass: this.mass,
+        position: [this.x, this.y]
+    });
+
+    this.body.addShape(new p2.Rectangle(80, 80));
+
+    this.setPosition(posX, posY);
 
     this.engineLeft = new Game.Engine(this, -40, 0);
-    this.engineLeft.rotation = Math.PI + Math.PI / 2;
-
     this.engineRight = new Game.Engine(this, 40, 0);
-    this.engineRight.rotation = Math.PI + Math.PI / 2;
 };
 
-Game.Player.prototype = Object.create(Game.GravityObject.prototype);
+Game.Player.prototype = Object.create(Game.PhysicsObject.prototype);
 Game.Player.prototype.constructor = Game.Player;
 
 Game.Player.prototype.update = function (delta) {
@@ -58,15 +61,15 @@ Game.Player.prototype.update = function (delta) {
     this.engineLeft.update(delta);
     this.engineRight.update(delta);
 
-    this.rotation += this.angularVelocity * delta;
-
-    Game.GravityObject.prototype.update.call(this, delta);
+    Game.PhysicsObject.prototype.update.call(this, delta);
 };
 
-Game.Player.prototype.touch = function (touchWith) {
-    Game.GravityObject.prototype.touch.call(this, touchWith);
+Game.Player.prototype.inject = function (world) {
+    world.addBody(this.body);
 
-    var l = this.velocity.len();
+    this.engineLeft.inject(world);
+    this.engineRight.inject(world);
 
-    this.velocity.set(this.x - touchWith.x, this.y - touchWith.y).lim(l * 0.8);
+    this.parent.addChild(this.engineLeft);
+    this.parent.addChild(this.engineRight);
 };
